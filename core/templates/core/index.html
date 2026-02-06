@@ -1,0 +1,43 @@
+{% extends 'core/base.html'%}
+
+{% block title%} Welcome {% endblock %}
+{% block content %}
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Here are our latest items!</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {% for item in items %}
+            <div>
+                <a href="{% url 'item:detail' item.id %}">
+                    <div>
+                        <!--<a href="{{ item.image_credit}}">-->
+                        <img src="{{ item.image.url }}" class="rounded-t-xl h-full w-full object-cover">
+                        <!--</a>-->
+                    </div>
+
+                    <div class="p-4 bg-white rounded-b-xl">
+                        <h2 class="text-l">{{ item.name }}</h2>
+                        <!--<p class="text-sm">{{ item.description }}</p>-->
+                        <p class="mb-3 text-gray-500">$ {{ item.price }}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mt-6 px-3 sm:px-6 py-5 sm:py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Why not browse through our categories?</h2>
+        <div class="grid grid-cols-3 gap-3">
+            {% for category in categories %}
+            <div>
+                <a href="#">
+                    <div class="p-3 sm:p-6 bg-white rounded-b-xl">
+                        <h2 class="text-lg">{{ category.name }}</h2>
+                        <p class="text-gray-500"> {{ category.items.count }} item(s)</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %} {{ item.name }} {% endblock %}
+
+{% block content %}
+<div class="flex flex-col sm:grid sm:grid-cols-5 gap-3 sm:gap-6">
+    <div class="sm:col-span-3">
+        <img src="{{ item.image.url }}" class="rounded-xl object-cover">
+    </div>
+
+    <div class="p-3 sm:col-span-2  sm:p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-2xl sm:text-3xl">{{ item.name }}</h1>
+        <p class="text-gray-500"><strong>Price:</strong> ${{ item.price }}</p>
+        <p class="text-gray-500"><strong>Seller:</strong> {{ item.created_by.username }}</p>
+        
+        {% if item.description %}
+            <p class="text-gray-500"><strong>Description:</strong> <br> {{ item.description }}</p>
+        {% endif %}
+        <p class="text-gray-500"><strong>Image Credit:</strong> <a href="{{ item.image_credit }}" class="text-blue-600 visited:text-purple-600">Click me</a> </p>
+
+        {% if request.user == item.created_by %}
+            <div class="mt-6 p-6 bg-white rounded-xl">
+                <a href="{% url 'item:edit' item.id %}" class="inline-block mt-3 sm:mt-6 px-3 py-3 sm:px-6 sm:py-6 text-base font-semibold bg-green-500 text-white rounded-xl hover:bg-teal-700">Edit</a>
+                <a href="{% url 'item:delete' item.id %}" class="inline-block mt-3 sm:mt-6 px-3 py-3 sm:px-6 sm:py-6 text-base font-semibold bg-red-500 text-white rounded-xl hover:bg-teal-700">Delete</a>
+            </div>
+        {% else %}
+            <a href="#" class="inline-block mt-3 sm:mt-6 px-3 py-3 sm:px-6 sm:py-6 text-base font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact Seller</a>
+        {% endif %}
+    </div>
+
+    <div class="sm:col-span-5 sm:mt-6 px-3 sm:px-6 py-4 sm:py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-4 sm:mb-12 text-2xl text-center">Related Items</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {% for item in related_items %}
+            <div>
+                <a href="{% url 'item:detail' item.id %}">
+                    <div>
+                        <img src="{{ item.image.url }}" class="rounded-t-xl h-full w-full object-cover">
+                    </div>
+
+                    <div class="p-4 sm:p-6 bg-white rounded-b-xl">
+                        <h2 class="text-l">{{ item.name }}</h2>
+                        <!--<p class="text-sm">{{ item.description }}</p>-->
+                        <p class="mb-3 text-gray-500">$ {{ item.price }}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
